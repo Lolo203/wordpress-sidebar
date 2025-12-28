@@ -1,0 +1,198 @@
+/* Estilos del frontend - Barra lateral de precios */
+
+.wp-price-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 320px;
+    background: #ffffff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+}
+
+.wp-price-sidebar.collapsed {
+    transform: translateX(100%);
+}
+
+/* Botón de toggle */
+.wp-price-sidebar-toggle {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 80px;
+    background: #2271b1;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.wp-price-sidebar-toggle:hover {
+    background: #135e96;
+}
+
+.wp-price-sidebar-toggle .arrow-icon {
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.wp-price-sidebar.collapsed .wp-price-sidebar-toggle .arrow-icon {
+    transform: rotate(180deg);
+}
+
+/* Contenido de la barra */
+.wp-price-sidebar-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.wp-price-sidebar-header {
+    padding: 20px;
+    background: #2271b1;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wp-price-sidebar-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Body - lista scrolleable */
+.wp-price-sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* Divisiones */
+.price-division {
+    margin-bottom: 30px;
+}
+
+.price-division:last-child {
+    margin-bottom: 0;
+}
+
+.division-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2271b1;
+    margin: 0 0 15px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #2271b1;
+}
+
+/* Items */
+.price-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f6f7f7;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.price-item:hover {
+    background: #e8eaeb;
+}
+
+.item-name {
+    font-size: 14px;
+    color: #1d2327;
+    font-weight: 500;
+    flex: 1;
+}
+
+.item-price {
+    font-size: 15px;
+    color: #2271b1;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+/* Scrollbar personalizada */
+.wp-price-sidebar-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.wp-price-sidebar-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.wp-price-sidebar-body::-webkit-scrollbar-thumb {
+    background: #c3c4c7;
+    border-radius: 4px;
+}
+
+.wp-price-sidebar-body::-webkit-scrollbar-thumb:hover {
+    background: #a7aaad;
+}
+
+/* Responsive - Tablets */
+@media (max-width: 1024px) {
+    .wp-price-sidebar {
+        width: 280px;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    .wp-price-sidebar {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .wp-price-sidebar-header h3 {
+        font-size: 18px;
+    }
+    
+    .division-title {
+        font-size: 15px;
+    }
+    
+    .item-name {
+        font-size: 13px;
+    }
+    
+    .item-price {
+        font-size: 14px;
+    }
+}
+
+/* Muy pequeño - ajustes adicionales */
+@media (max-width: 480px) {
+    .wp-price-sidebar {
+        max-width: 260px;
+    }
+    
+    .wp-price-sidebar-header,
+    .wp-price-sidebar-body {
+        padding: 15px;
+    }
+    
+    .price-item {
+        padding: 10px;
+    }
+}

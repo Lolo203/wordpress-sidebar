@@ -1,0 +1,90 @@
+/* Estilos del panel de administración */
+
+.wp-price-sidebar-admin {
+    padding: 20px;
+}
+
+/* Lista de divisiones */
+.division-list-header {
+    margin: 20px 0;
+}
+
+.wp-price-sidebar-admin .wp-list-table {
+    margin-top: 20px;
+}
+
+.wp-price-sidebar-admin .button-link-delete {
+    color: #b32d2e;
+}
+
+.wp-price-sidebar-admin .button-link-delete:hover {
+    color: #dc3232;
+}
+
+/* Formulario de división */
+.division-form-container {
+    max-width: 800px;
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.division-form .required {
+    color: #dc3232;
+}
+
+.division-form .form-table th {
+    width: 200px;
+}
+
+/* Gestión de items */
+.items-manager {
+    max-width: 1200px;
+}
+
+.items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.items-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.item-form-section,
+.items-list-section {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.item-form-section h3,
+.items-list-section h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 10px;
+}
+
+.item-form .required {
+    color: #dc3232;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .items-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 782px) {
+    .items-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
