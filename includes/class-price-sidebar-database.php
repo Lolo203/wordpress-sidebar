@@ -54,7 +54,8 @@ class WP_Price_Sidebar_Database {
     public static function get_divisions() {
         global $wpdb;
         $table = $wpdb->prefix . 'price_divisions';
-        return $wpdb->get_results("SELECT * FROM $table ORDER BY order_position ASC, id ASC");
+        $results = $wpdb->get_results("SELECT * FROM $table ORDER BY order_position ASC, id ASC");
+        return $results ? $results : array();
     }
     
     /**
@@ -108,10 +109,11 @@ class WP_Price_Sidebar_Database {
     public static function get_items($division_id) {
         global $wpdb;
         $table = $wpdb->prefix . 'price_items';
-        return $wpdb->get_results($wpdb->prepare(
+        $results = $wpdb->get_results($wpdb->prepare(
             "SELECT * FROM $table WHERE division_id = %d ORDER BY order_position ASC, id ASC",
             $division_id
         ));
+        return $results ? $results : array();
     }
     
     /**
@@ -153,20 +155,5 @@ class WP_Price_Sidebar_Database {
         global $wpdb;
         $table = $wpdb->prefix . 'price_items';
         return $wpdb->delete($table, array('id' => $id));
-    }
-    
-    /**
-     * Limpiar al desinstalar
-     */
-    public static function uninstall() {
-        global $wpdb;
-        
-        $table_divisions = $wpdb->prefix . 'price_divisions';
-        $table_items = $wpdb->prefix . 'price_items';
-        
-        $wpdb->query("DROP TABLE IF EXISTS $table_items");
-        $wpdb->query("DROP TABLE IF EXISTS $table_divisions");
-        
-        delete_option('wp_price_sidebar_db_version');
     }
 }

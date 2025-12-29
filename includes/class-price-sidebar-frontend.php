@@ -48,8 +48,10 @@ class WP_Price_Sidebar_Frontend {
     private function should_display_sidebar() {
         if (is_singular()) {
             global $post;
-            $show = get_post_meta($post->ID, '_show_price_sidebar', true);
-            return $show === '1';
+            if ($post) {
+                $show = get_post_meta($post->ID, '_show_price_sidebar', true);
+                return $show === '1';
+            }
         }
         return false;
     }
@@ -70,7 +72,7 @@ class WP_Price_Sidebar_Frontend {
         
         ?>
         <div id="wp-price-sidebar" class="wp-price-sidebar collapsed">
-            <button class="wp-price-sidebar-toggle" aria-label="<?php esc_attr_e('Abrir/Cerrar lista de precios', 'wp-price-sidebar'); ?>">
+            <button class="wp-price-sidebar-toggle" aria-label="Abrir/Cerrar lista de precios">
                 <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
@@ -78,7 +80,7 @@ class WP_Price_Sidebar_Frontend {
             
             <div class="wp-price-sidebar-content">
                 <div class="wp-price-sidebar-header">
-                    <h3><?php _e('Lista de Precios', 'wp-price-sidebar'); ?></h3>
+                    <h3>Lista de Precios</h3>
                 </div>
                 
                 <div class="wp-price-sidebar-body">

@@ -11,20 +11,34 @@ if (!defined('ABSPATH')) {
 if (isset($_GET['message'])) {
     $message = sanitize_text_field($_GET['message']);
     $messages = array(
-        'division_saved' => __('División guardada correctamente', 'wp-price-sidebar'),
-        'division_deleted' => __('División eliminada correctamente', 'wp-price-sidebar'),
-        'item_saved' => __('Item guardado correctamente', 'wp-price-sidebar'),
-        'item_deleted' => __('Item eliminado correctamente', 'wp-price-sidebar')
+        'division_saved' => 'División guardada correctamente',
+        'division_deleted' => 'División eliminada correctamente',
+        'item_saved' => 'Item guardado correctamente',
+        'item_deleted' => 'Item eliminado correctamente'
     );
     
     if (isset($messages[$message])) {
         echo '<div class="notice notice-success is-dismissible"><p>' . esc_html($messages[$message]) . '</p></div>';
     }
 }
+
+// Mostrar errores
+if (isset($_GET['error'])) {
+    $error = sanitize_text_field($_GET['error']);
+    $errors = array(
+        'empty_name' => 'El nombre de la división no puede estar vacío',
+        'empty_fields' => 'Todos los campos son obligatorios',
+        'db_error' => 'Error de base de datos: ' . (isset($_GET['detail']) ? sanitize_text_field($_GET['detail']) : 'desconocido')
+    );
+    
+    if (isset($errors[$error])) {
+        echo '<div class="notice notice-error is-dismissible"><p>' . esc_html($errors[$error]) . '</p></div>';
+    }
+}
 ?>
 
 <div class="wrap wp-price-sidebar-admin">
-    <h1><?php _e('Gestión de Listas de Precios', 'wp-price-sidebar'); ?></h1>
+    <h1>Gestión de Listas de Precios</h1>
     
     <?php
     switch ($action) {
@@ -40,43 +54,70 @@ if (isset($_GET['message'])) {
         default:
             // Lista de divisiones
             $divisions = WP_Price_Sidebar_Database::get_divisions();
+            
+            // Debug: Mostrar información
+            global $wpdb;
+            $table = $wpdb->prefix . 'price_divisions';
+            $count = $wpdb->get_var("SELECT COUNT(*) FROM $table");
+            
             ?>
             <div class="division-list-header">
                 <a href="<?php echo admin_url('admin.php?page=wp-price-sidebar&action=add_division'); ?>" class="button button-primary">
-                    <?php _e('Añadir Nueva División', 'wp-price-sidebar'); ?>
+                    Añadir Nueva División
                 </a>
+                <p style="margin-left: 10px; color: #666;">
+                    Total de divisiones en la base de datos: <?php echo intval($count); ?>
+                </p>
             </div>
             
             <?php if (empty($divisions)): ?>
-                <p><?php _e('No hay divisiones creadas. ¡Crea tu primera división!', 'wp-price-sidebar'); ?></p>
+                <div class="notice notice-info" style="margin-top: 20px;">
+                    <p><strong>No hay divisiones creadas.</strong> Haz clic en "Añadir Nueva División" para crear tu primera división.</p>
+                </div>
+                
+                <?php
+                // Debug adicional
+                if ($count > 0) {
+                    echo '<div class="notice notice-warning"><p><strong>DEBUG:</strong> Hay ' . intval($count) . ' divisiones en la base de datos pero get_divisions() retorna vacío. Revisa el archivo class-price-sidebar-database.php</p></div>';
+                    
+                    // Mostrar datos raw
+                    $raw_divisions = $wpdb->get_results("SELECT * FROM $table", ARRAY_A);
+                    echo '<pre>';
+                    print_r($raw_divisions);
+                    echo '</pre>';
+                }
+                ?>
+                
             <?php else: ?>
-                <table class="wp-list-table widefat fixed striped">
+                <table class="wp-list-table widefat fixed striped" style="margin-top: 20px;">
                     <thead>
                         <tr>
-                            <th><?php _e('Nombre', 'wp-price-sidebar'); ?></th>
-                            <th><?php _e('Orden', 'wp-price-sidebar'); ?></th>
-                            <th><?php _e('Items', 'wp-price-sidebar'); ?></th>
-                            <th><?php _e('Acciones', 'wp-price-sidebar'); ?></th>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Orden</th>
+                            <th>Items</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($divisions as $division): ?>
                             <?php $items_count = count(WP_Price_Sidebar_Database::get_items($division->id)); ?>
                             <tr>
+                                <td><?php echo esc_html($division->id); ?></td>
                                 <td><strong><?php echo esc_html($division->name); ?></strong></td>
                                 <td><?php echo esc_html($division->order_position); ?></td>
                                 <td><?php echo esc_html($items_count); ?> items</td>
                                 <td>
                                     <a href="<?php echo admin_url('admin.php?page=wp-price-sidebar&action=manage_items&division_id=' . $division->id); ?>" class="button button-small">
-                                        <?php _e('Gestionar Items', 'wp-price-sidebar'); ?>
+                                        Gestionar Items
                                     </a>
                                     <a href="<?php echo admin_url('admin.php?page=wp-price-sidebar&action=edit_division&division_id=' . $division->id); ?>" class="button button-small">
-                                        <?php _e('Editar', 'wp-price-sidebar'); ?>
+                                        Editar
                                     </a>
                                     <a href="<?php echo wp_nonce_url(admin_url('admin-post.php?action=delete_division&division_id=' . $division->id), 'delete_division_' . $division->id); ?>" 
                                        class="button button-small button-link-delete" 
-                                       onclick="return confirm('<?php esc_attr_e('¿Estás seguro? Esto eliminará todos los items de esta división.', 'wp-price-sidebar'); ?>');">
-                                        <?php _e('Eliminar', 'wp-price-sidebar'); ?>
+                                       onclick="return confirm('¿Estás seguro? Esto eliminará todos los items de esta división.');">
+                                        Eliminar
                                     </a>
                                 </td>
                             </tr>
